@@ -1,0 +1,21 @@
+datasource db {
+    provider = "postgresql"
+    url      = "postgresql://postgres:postgres@localhost:5432/airbnb"
+}
+
+generator client {
+    provider             = "prisma-client-py"
+    interface            = "asyncio"
+    recursive_type_depth = 5
+}
+
+model Listining {
+    id                  Int    @id @default(autoincrement())
+    listining_id        Int
+    listing_url         String @db.VarChar
+    scrape_id           BigInt
+    host_id             Int
+    host_listings_count Float
+
+    @@map("listining")
+}
