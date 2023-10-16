@@ -10,12 +10,27 @@ generator client {
 }
 
 model Listining {
-    id                  Int    @id @default(autoincrement())
-    listining_id        Int
-    listing_url         String @db.VarChar
+    id                  Int       @id @default(autoincrement())
+    listining_id        Int       @unique
+    listing_url         String    @db.VarChar
     scrape_id           BigInt
     host_id             Int
     host_listings_count Float
+    reviews             Reviews[]
 
     @@map("listining")
+}
+
+model Reviews {
+    id            Int        @id @default(autoincrement())
+    listing_id    Int
+    review_id     Int
+    date          String
+    reviewer_id   Int
+    reviewer_name String
+    comments      String?
+    Listining     Listining? @relation(fields: [listing_id], references: [listining_id])
+    listiningId   Int?
+
+    @@map("reviews")
 }
