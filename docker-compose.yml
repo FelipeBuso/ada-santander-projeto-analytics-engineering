@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:latest
+    container_name: projeto-airbnb
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./volumes/db:/var/lib/postgresql/data
+    ports:
+      - "5434:5434"
+
+volumes:
+  postgres:
