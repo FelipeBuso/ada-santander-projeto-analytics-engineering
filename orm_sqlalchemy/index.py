@@ -1,7 +1,7 @@
 from typing import List
 from typing import Optional
 from sqlalchemy import ForeignKey
-from sqlalchemy import String
+from sqlalchemy import BigInteger
 from sqlalchemy import create_engine
 from sqlalchemy import text
 from sqlalchemy.orm import DeclarativeBase
@@ -15,15 +15,85 @@ class Base(DeclarativeBase):
     pass
 
 
-class Listining(Base):
-    __tablename__ = "listining"
+class Listings(Base):
+    __tablename__ = "listings"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    listining_id: Mapped[int]
     listing_url: Mapped[str]
-    scrape_id: Mapped[int]
+    scrape_id: Mapped[int] = mapped_column(BigInteger)
+    last_scraped: Mapped[str]
+    source: Mapped[str]
+    name: Mapped[str]
+    description: Mapped[Optional[str]]
+    neighborhood_overview: Mapped[Optional[str]]
+    picture_url: Mapped[str]
     host_id: Mapped[int]
-    host_listings_count: Mapped[int]
+    host_url: Mapped[str]
+    host_name: Mapped[Optional[str]]
+    host_since: Mapped[Optional[str]]
+    host_location: Mapped[Optional[str]]
+    host_about: Mapped[Optional[str]]
+    host_response_time: Mapped[Optional[str]]
+    host_response_rate: Mapped[Optional[str]]
+    host_acceptance_rate: Mapped[Optional[str]]
+    host_is_superhost: Mapped[bool]
+    host_thumbnail_url: Mapped[Optional[str]]
+    host_picture_url: Mapped[Optional[str]]
+    host_neighbourhood: Mapped[Optional[str]]
+    host_listings_count: Mapped[float]
+    host_total_listings_count: Mapped[float]
+    host_verifications: Mapped[Optional[str]]
+    host_has_profile_pic: Mapped[bool]
+    host_identity_verified: Mapped[bool]
+    neighbourhood: Mapped[Optional[str]]
+    neighbourhood_cleansed: Mapped[str]
+    neighbourhood_group_cleansed: Mapped[float]
+    latitude: Mapped[float]
+    longitude: Mapped[float]
+    property_type: Mapped[str]
+    room_type: Mapped[str]
+    accommodates: Mapped[int]
+    bathrooms: Mapped[float]
+    bathrooms_text: Mapped[Optional[str]]
+    bedrooms: Mapped[float]
+    beds: Mapped[float]
+    amenities: Mapped[str]
+    price: Mapped[str]
+    minimum_nights: Mapped[int]
+    maximum_nights: Mapped[int]
+    minimum_minimum_nights: Mapped[int]
+    maximum_minimum_nights: Mapped[int]
+    minimum_maximum_nights: Mapped[int]
+    maximum_maximum_nights: Mapped[int]
+    minimum_nights_avg_ntm: Mapped[float]
+    maximum_nights_avg_ntm: Mapped[float]
+    calendar_updated: Mapped[float]
+    has_availability: Mapped[bool]
+    availability_30: Mapped[int]
+    availability_60: Mapped[int]
+    availability_90: Mapped[int]
+    availability_365: Mapped[int]
+    calendar_last_scraped: Mapped[str]
+    number_of_reviews: Mapped[int]
+    number_of_reviews_ltm: Mapped[int]
+    number_of_reviews_l30d: Mapped[int]
+    first_review: Mapped[Optional[str]]
+    last_review: Mapped[Optional[str]]
+    review_scores_rating: Mapped[float]
+    review_scores_accuracy: Mapped[float]
+    review_scores_cleanliness: Mapped[float]
+    review_scores_checkin: Mapped[float]
+    review_scores_communication: Mapped[float]
+    review_scores_location: Mapped[float]
+    review_scores_value: Mapped[float]
+    license: Mapped[float]
+    instant_bookable: Mapped[bool]
+    calculated_host_listings_count: Mapped[int]
+    calculated_host_listings_count_entire_homes: Mapped[int]
+    calculated_host_listings_count_private_rooms: Mapped[int]
+    calculated_host_listings_count_shared_rooms: Mapped[int]
+    reviews_per_month: Mapped[float]
+
     reviews: Mapped[List["Reviews"]] = relationship(
         back_populates="listining", cascade="all, delete-orphan"
     )
@@ -35,15 +105,14 @@ class Listining(Base):
 class Reviews(Base):
     __tablename__ = "reviews"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    listing_id: Mapped[int] = mapped_column(ForeignKey("listining.listining_id"))
-    review_id: Mapped[int]
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    listing_id: Mapped[int] = mapped_column(ForeignKey("listings.id"))
     date: Mapped[str]
-    reviewer_id: Mapped[int]
+    reviewer_id: Mapped[int] = mapped_column(BigInteger)
     reviewer_name: Mapped[str]
     comments: Mapped[Optional[str]]
 
-    listining: Mapped["Listining"] = relationship(back_populates="reviews")
+    listining: Mapped["Listings"] = relationship(back_populates="reviews")
 
     def __repr__(self) -> str:
         return (
