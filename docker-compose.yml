@@ -5,12 +5,12 @@ services:
     container_name: projeto-airbnb
     restart: always
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - ./volumes/db:/var/lib/postgresql/data
     ports:
-      - "5434:5434"
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
 
 volumes:
   postgres:
