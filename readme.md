@@ -14,7 +14,7 @@
 
 - Subir um container com PostgresSQL usando Docker Compose
 
-      - Na raiz do projeto digite:
+  - Na raiz do projeto digite:
 
   `docker compose up -d`
 
