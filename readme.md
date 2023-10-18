@@ -10,6 +10,10 @@
 
   `pip install -r  requirements.txt`
 
+## Variáveis de ambiente
+
+- Crie um arquivo chamado `.env` na raiz do seu projeto com as os valores das variáveis de ambiente de acordo com àquelas do arquivo `.env.example`.
+
 ## PostgreSQL
 
 - Subir um container com PostgresSQL usando Docker Compose
