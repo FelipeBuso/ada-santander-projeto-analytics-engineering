@@ -10,7 +10,7 @@ services:
     volumes:
       - ./volumes/db:/var/lib/postgresql/data
     ports:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+      - "${POSTGRES_PORT_LOCAL}:${POSTGRES_PORT_CONTAINER}"
 
 volumes:
   postgres:
