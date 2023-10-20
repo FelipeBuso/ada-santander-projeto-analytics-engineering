@@ -9,6 +9,7 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
+import os
 
 
 class Base(DeclarativeBase):
@@ -127,7 +128,7 @@ class DatabaseHandler:
 
     def __init__(self):
         # Crie a URL de conexão no construtor
-        db_url = f"postgresql://postgres:postgres@localhost:5432/airbnb"
+        db_url = os.environ.get("POSTGRES_URI")
         self.engine = create_engine(db_url)
 
     def connect(self):
