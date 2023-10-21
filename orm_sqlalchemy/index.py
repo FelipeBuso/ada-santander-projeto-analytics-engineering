@@ -98,6 +98,9 @@ class Listings(Base):
     reviews: Mapped[List["Reviews"]] = relationship(
         back_populates="listining", cascade="all, delete-orphan"
     )
+    calendars: Mapped[List["Calendars"]] = relationship(
+        back_populates="listining", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"listining(id={self.id!r}, listining_id={self.listining_id!r}, listing_url={self.listing_url!r})"
@@ -121,6 +124,26 @@ class Reviews(Base):
         )
 
 
+class Calendars(Base):
+    __tablename__ = "calendars"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    listing_id: Mapped[int] = mapped_column(ForeignKey("listings.id"))
+    date: Mapped[str]
+    available: Mapped[bool]
+    price: Mapped[float]
+    adjusted_price: Mapped[float]
+    minimum_nights: Mapped[float]
+    maximum_nights: Mapped[float]
+
+    listining: Mapped["Listings"] = relationship(back_populates="calendars")
+
+    def __repr__(self) -> str:
+        return (
+            f"Reviews(id={self.id!r}, avaiable={self.available!r}, date={self.date!r})"
+        )
+
+
 class DatabaseHandler:
     """
     Esta classe fornece métodos para conectar a um banco de dados PostgreSQL usando SQLAlchemy.
@@ -130,7 +153,7 @@ class DatabaseHandler:
         db_url = os.environ.get("POSTGRES_URI")
         self._engine = create_engine(db_url)
 
-    tables = {"listings": Listings, "reviews": Reviews}
+    tables = {"listings": Listings, "reviews": Reviews, "calendars": Calendars}
 
     def get_engine(self):
         return self._engine
@@ -191,6 +214,9 @@ class DatabaseHandler:
             data (list[dict]): Lista de dicionários com os dados.
             schema (str): Nome do schema onde as tabelas estão localizadas no banco de dados.
         """
+
+        if not table in self.tables:
+            raise Exception("Model não localizado")
 
         # Cria as tabelas caso não existam
         self.create_tables(schema)
