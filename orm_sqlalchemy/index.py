@@ -1,15 +1,16 @@
+import os
+import pandas as pd
 from typing import List
 from typing import Optional
-from sqlalchemy import ForeignKey
 from sqlalchemy import BigInteger
 from sqlalchemy import create_engine
+from sqlalchemy import ForeignKey
 from sqlalchemy import text
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import Session
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import Session
 from sqlalchemy.orm import relationship
-import os
 
 
 class Base(DeclarativeBase):
@@ -236,3 +237,26 @@ class DatabaseHandler:
                     print(error)
         else:
             raise Exception("Não existe o schema no banco de dados")
+
+    def dataframe_to_sql(self, table: str, df: pd.DataFrame, schema: str) -> None:
+        """
+        Grava os dados na tabela informada usando o método to_sql do Pandas.
+
+        Args:
+            table (str): Nome da tabela onde será inserido os dados.
+            df (DataFrame): DataFrame com os dados.
+            schema (str): Nome do schema onde as tabelas estão localizadas no banco de dados.
+        """
+        batch_size = 10_000
+        start_idx = 0
+
+        while start_idx < len(df):
+            batch_df = df.iloc[start_idx : start_idx + batch_size]
+            batch_df.to_sql(
+                name=table,
+                con=self.get_engine(),
+                schema=schema,
+                if_exists="append",
+                index=False,
+            )
+            start_idx += batch_size
