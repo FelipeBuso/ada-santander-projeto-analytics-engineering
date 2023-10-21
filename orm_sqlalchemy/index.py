@@ -11,6 +11,7 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import relationship
+from sqlalchemy.exc import IntegrityError
 
 
 class Base(DeclarativeBase):
@@ -227,14 +228,18 @@ class DatabaseHandler:
 
         if self.connect().dialect.has_schema(self.connect(), schema):
             with Session(self._engine) as session:
-                list_data = list()
+                # list_data = list()
                 for payload in data:
-                    list_data.append(selected_table(**payload))
-                try:
-                    session.add_all(list_data)
-                    session.commit()
-                except Exception as error:
-                    print(error)
+                    # list_data.append(selected_table(**payload))
+                    try:
+                        session.add(selected_table(**payload))
+                        session.commit()
+                    except IntegrityError as error:
+                        session.rollback()
+                        print("Dado já existente")
+                    except Exception as e:
+                        session.rollback()
+                        print(e)
         else:
             raise Exception("Não existe o schema no banco de dados")
 
