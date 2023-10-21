@@ -123,19 +123,24 @@ class Reviews(Base):
 
 class DatabaseHandler:
     """
-    Esta classe fornece métodos para conectar a um banco de dados PostgreSQL usando SQLAlchemy e executar consultas.
+    Esta classe fornece métodos para conectar a um banco de dados PostgreSQL usando SQLAlchemy.
     """
 
     def __init__(self):
-        # Crie a URL de conexão no construtor
         db_url = os.environ.get("POSTGRES_URI")
-        self.engine = create_engine(db_url)
+        self._engine = create_engine(db_url)
+
+    tables = {"listings": Listings, "reviews": Reviews}
+
+    def get_engine(self):
+        return self._engine
 
     def connect(self):
         """
         Abre uma conexão com o banco de dados.
         """
-        self.connection = self.engine.connect()
+        self.connection = self._engine.connect()
+        return self.connection
 
     def disconnect(self):
         """
@@ -143,11 +148,21 @@ class DatabaseHandler:
         """
         self.connection.close()
 
-    def create_tables(self):
+    def create_tables(self, schema_name: str) -> None:
         """
-        Cria as tabelas no banco de dados com base classes dos recursos
+        Cria as tabelas no schema informado, com base nas classes dos recursos
+
+         Args:
+            schema_name (str): Nome do schema onde será criado as tabelas.
+
         """
-        Base.metadata.create_all(self.engine)
+        if self.connect().dialect.has_schema(self.connect(), schema_name):
+            for key in self.tables.keys():
+                table = self.tables[key]
+                table.__table__.schema = schema_name
+
+        Base.metadata.create_all(bind=self.get_engine())
+        self.disconnect()
 
     def execute_query(self, query_string) -> list:
         """
@@ -167,38 +182,31 @@ class DatabaseHandler:
             print(error)
             return None
 
-    def post_listining(self, data: List[dict]):
+    def post_data(self, table: str, data: List[dict], schema: str) -> None:
         """
-        Grava os dados na tabela Lisiting.
+        Grava os dados na tabela informada.
 
         Args:
+            table (str): Nome da tabela onde será inserido os dados.
             data (list[dict]): Lista de dicionários com os dados.
-
+            schema (str): Nome do schema onde as tabelas estão localizadas no banco de dados.
         """
-        with Session(self.engine) as session:
-            list_listining = list()
-            for payload in data:
-                list_listining.append(Listining(**payload))
-            try:
-                session.add_all(list_listining)
-                session.commit()
-            except Exception as error:
-                print(error)
 
-    def post_reviews(self, data: List[dict]):
-        """
-        Grava os dados na tabela Reviews.
+        # Cria as tabelas caso não existam
+        self.create_tables(schema)
 
-        Args:
-            data (list[dict]): Lista de dicionários com os dados.
+        # Retorna a classe da tabela informada
+        selected_table: DeclarativeBase = self.tables[table]
 
-        """
-        with Session(self.engine) as session:
-            list_reviews = list()
-            for payload in data:
-                list_reviews.append(Reviews(**payload))
-            try:
-                session.add_all(list_reviews)
-                session.commit()
-            except Exception as error:
-                print(error)
+        if self.connect().dialect.has_schema(self.connect(), schema):
+            with Session(self._engine) as session:
+                list_data = list()
+                for payload in data:
+                    list_data.append(selected_table(**payload))
+                try:
+                    session.add_all(list_data)
+                    session.commit()
+                except Exception as error:
+                    print(error)
+        else:
+            raise Exception("Não existe o schema no banco de dados")
