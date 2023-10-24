@@ -1,14 +1,17 @@
+import os
+import pandas as pd
 from typing import List
 from typing import Optional
-from sqlalchemy import ForeignKey
 from sqlalchemy import BigInteger
 from sqlalchemy import create_engine
+from sqlalchemy import ForeignKey
 from sqlalchemy import text
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import Session
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import Session
 from sqlalchemy.orm import relationship
+from sqlalchemy.exc import IntegrityError
 
 
 class Base(DeclarativeBase):
@@ -97,6 +100,9 @@ class Listings(Base):
     reviews: Mapped[List["Reviews"]] = relationship(
         back_populates="listining", cascade="all, delete-orphan"
     )
+    calendars: Mapped[List["Calendars"]] = relationship(
+        back_populates="listining", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"listining(id={self.id!r}, listining_id={self.listining_id!r}, listing_url={self.listing_url!r})"
@@ -120,21 +126,46 @@ class Reviews(Base):
         )
 
 
+class Calendars(Base):
+    __tablename__ = "calendars"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    listing_id: Mapped[int] = mapped_column(ForeignKey("listings.id"))
+    date: Mapped[str]
+    available: Mapped[bool]
+    price: Mapped[float]
+    adjusted_price: Mapped[float]
+    minimum_nights: Mapped[float]
+    maximum_nights: Mapped[float]
+
+    listining: Mapped["Listings"] = relationship(back_populates="calendars")
+
+    def __repr__(self) -> str:
+        return (
+            f"Reviews(id={self.id!r}, avaiable={self.available!r}, date={self.date!r})"
+        )
+
+
 class DatabaseHandler:
     """
-    Esta classe fornece métodos para conectar a um banco de dados PostgreSQL usando SQLAlchemy e executar consultas.
+    Esta classe fornece métodos para conectar a um banco de dados PostgreSQL usando SQLAlchemy.
     """
 
     def __init__(self):
-        # Crie a URL de conexão no construtor
-        db_url = f"postgresql://postgres:postgres@localhost:5432/airbnb"
-        self.engine = create_engine(db_url)
+        db_url = os.environ.get("POSTGRES_URI")
+        self._engine = create_engine(db_url)
+
+    tables = {"listings": Listings, "reviews": Reviews, "calendars": Calendars}
+
+    def get_engine(self):
+        return self._engine
 
     def connect(self):
         """
         Abre uma conexão com o banco de dados.
         """
-        self.connection = self.engine.connect()
+        self.connection = self._engine.connect()
+        return self.connection
 
     def disconnect(self):
         """
@@ -142,11 +173,21 @@ class DatabaseHandler:
         """
         self.connection.close()
 
-    def create_tables(self):
+    def create_tables(self, schema_name: str) -> None:
         """
-        Cria as tabelas no banco de dados com base classes dos recursos
+        Cria as tabelas no schema informado, com base nas classes dos recursos
+
+         Args:
+            schema_name (str): Nome do schema onde será criado as tabelas.
+
         """
-        Base.metadata.create_all(self.engine)
+        if self.connect().dialect.has_schema(self.connect(), schema_name):
+            for key in self.tables.keys():
+                table = self.tables[key]
+                table.__table__.schema = schema_name
+
+        Base.metadata.create_all(bind=self.get_engine())
+        self.disconnect()
 
     def execute_query(self, query_string) -> list:
         """
@@ -166,38 +207,61 @@ class DatabaseHandler:
             print(error)
             return None
 
-    def post_listining(self, data: List[dict]):
+    def post_data(self, table: str, data: List[dict], schema: str) -> None:
         """
-        Grava os dados na tabela Lisiting.
+        Grava os dados na tabela informada.
 
         Args:
+            table (str): Nome da tabela onde será inserido os dados.
             data (list[dict]): Lista de dicionários com os dados.
-
+            schema (str): Nome do schema onde as tabelas estão localizadas no banco de dados.
         """
-        with Session(self.engine) as session:
-            list_listining = list()
-            for payload in data:
-                list_listining.append(Listining(**payload))
-            try:
-                session.add_all(list_listining)
-                session.commit()
-            except Exception as error:
-                print(error)
 
-    def post_reviews(self, data: List[dict]):
+        if not table in self.tables:
+            raise Exception("Model não localizado")
+
+        # Cria as tabelas caso não existam
+        self.create_tables(schema)
+
+        # Retorna a classe da tabela informada
+        selected_table: DeclarativeBase = self.tables[table]
+
+        if self.connect().dialect.has_schema(self.connect(), schema):
+            with Session(self._engine) as session:
+                # list_data = list()
+                for payload in data:
+                    # list_data.append(selected_table(**payload))
+                    try:
+                        session.add(selected_table(**payload))
+                        session.commit()
+                    except IntegrityError as error:
+                        session.rollback()
+                        print("Dado já existente")
+                    except Exception as e:
+                        session.rollback()
+                        print(e)
+        else:
+            raise Exception("Não existe o schema no banco de dados")
+
+    def dataframe_to_sql(self, table: str, df: pd.DataFrame, schema: str) -> None:
         """
-        Grava os dados na tabela Reviews.
+        Grava os dados na tabela informada usando o método to_sql do Pandas.
 
         Args:
-            data (list[dict]): Lista de dicionários com os dados.
-
+            table (str): Nome da tabela onde será inserido os dados.
+            df (DataFrame): DataFrame com os dados.
+            schema (str): Nome do schema onde as tabelas estão localizadas no banco de dados.
         """
-        with Session(self.engine) as session:
-            list_reviews = list()
-            for payload in data:
-                list_reviews.append(Reviews(**payload))
-            try:
-                session.add_all(list_reviews)
-                session.commit()
-            except Exception as error:
-                print(error)
+        batch_size = 10_000
+        start_idx = 0
+
+        while start_idx < len(df):
+            batch_df = df.iloc[start_idx : start_idx + batch_size]
+            batch_df.to_sql(
+                name=table,
+                con=self.get_engine(),
+                schema=schema,
+                if_exists="append",
+                index=False,
+            )
+            start_idx += batch_size
