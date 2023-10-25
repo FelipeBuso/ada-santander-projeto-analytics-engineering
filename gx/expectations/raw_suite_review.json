@@ -1,0 +1,101 @@
+{
+  "data_asset_type": null,
+  "expectation_suite_name": "raw_suite_review",
+  "expectations": [
+    {
+      "expectation_type": "expect_table_columns_to_match_set",
+      "kwargs": {
+        "column_set": [
+          "listing_id",
+          "id",
+          "date",
+          "reviewer_id",
+          "reviewer_name",
+          "comments"
+        ]
+      },
+      "meta": {
+        "notes": {
+          "content": "Verifica\u00e7\u00e3o dos nomes das coluna de Review.",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "listing_id"
+      },
+      "meta": {
+        "notes": {
+          "content": "Verifica\u00e7\u00e3o dos nomes das coluna de Review.",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "id"
+      },
+      "meta": {
+        "notes": {
+          "content": "Verifica\u00e7\u00e3o dos nomes das coluna de Review.",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "date"
+      },
+      "meta": {
+        "notes": {
+          "content": "Verifica\u00e7\u00e3o dos nomes das coluna de Review.",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "reviewer_id"
+      },
+      "meta": {
+        "notes": {
+          "content": "Verifica\u00e7\u00e3o dos nomes das coluna de Review.",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "reviewer_name"
+      },
+      "meta": {
+        "notes": {
+          "content": "Verifica\u00e7\u00e3o dos nomes das coluna de Review.",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "comments"
+      },
+      "meta": {
+        "notes": {
+          "content": "Verifica\u00e7\u00e3o dos nomes das coluna de Review.",
+          "format": "markdown"
+        }
+      }
+    }
+  ],
+  "ge_cloud_id": null,
+  "meta": {
+    "great_expectations_version": "0.17.23"
+  }
+}
