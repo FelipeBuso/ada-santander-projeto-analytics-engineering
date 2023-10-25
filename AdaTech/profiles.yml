@@ -1,0 +1,24 @@
+AdaTech:
+  outputs:
+
+    raw:
+      type: postgres
+      threads: 1
+      host: localhost
+      port: 5434
+      user: postgres
+      pass: postgres
+      dbname: airbnb
+      schema: raw
+
+    trusted:
+      type: postgres
+      threads: 1
+      host: postgres
+      port: ${POSTGRES_PORT_CONTAINER}
+      user: ${POSTGRES_USER}
+      pass: ${POSTGRES_PASSWORD}
+      dbname: airbnb
+      schema: trusted
+
+  target: raw
