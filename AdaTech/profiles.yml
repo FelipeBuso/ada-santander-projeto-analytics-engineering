@@ -1,24 +1,24 @@
 AdaTech:
   outputs:
 
-    dev:
+    raw:
       type: postgres
-      threads: [1 or more]
-      host: [host]
-      port: [port]
-      user: [dev_username]
-      pass: [dev_password]
-      dbname: [dbname]
-      schema: [dev_schema]
+      threads: 1
+      host: localhost
+      port: 5434
+      user: postgres
+      pass: postgres
+      dbname: airbnb
+      schema: raw
 
-    prod:
+    trusted:
       type: postgres
-      threads: [1 or more]
-      host: [host]
-      port: [port]
-      user: [prod_username]
-      pass: [prod_password]
-      dbname: [dbname]
-      schema: [prod_schema]
+      threads: 1
+      host: postgres
+      port: ${POSTGRES_PORT_CONTAINER}
+      user: ${POSTGRES_USER}
+      pass: ${POSTGRES_PASSWORD}
+      dbname: airbnb
+      schema: trusted
 
-  target: dev
+  target: raw
