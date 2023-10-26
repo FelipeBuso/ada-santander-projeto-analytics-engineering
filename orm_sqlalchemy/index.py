@@ -203,8 +203,8 @@ class DatabaseHandler:
         """
         try:
             query = text(query_string)
-            result = self.connection.execute(query)
-            return result
+            result = self.connect().execute(query)
+            return result.fetchall()
         except Exception as error:
             print(error)
             return None
