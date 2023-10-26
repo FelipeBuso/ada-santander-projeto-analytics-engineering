@@ -3,7 +3,7 @@ import re
 
 def only_number(value: str) -> float:
     """
-    Remove todos os caracteres menos dígitos e retorna um flat
+    Remove todos os caracteres menos dígitos e retorna um float
 
     Args:
         value (str): Valor em formato string

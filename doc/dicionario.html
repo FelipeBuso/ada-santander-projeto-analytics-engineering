@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Dicionário de Dados</title>
+        <style>
+            table{
+                width: 960px;
+                border: 1px solid #aaa;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+            table th {
+                font-weight: normal;
+                text-shadow: -1px -1px 1px #999;
+                color: #fff;
+                background-color: #213f90;
+                border-bottom: 1px solid #eee;
+                text-align: center;
+                font-size: 15pt;
+                font-weight: bold;
+            }
+            table th, table td{
+                border: solid 1px #eee;
+                padding: 7px;
+            }
+            table tr:nth-of-type(2n){
+                background-color: #ffffff;
+            }
+            table tr:nth-of-type(2n-1) {
+                background-color: #eee;
+            }
+            th:first-of-type{
+                width: 5%;
+                border-top-left-radius: 7px;
+            }
+            th:nth-of-type(2){
+                width: 20%;
+            }
+            th:nth-of-type(3){
+                width: 50%;
+            }
+            th:nth-of-type(4){
+                width: 5%;
+            }
+            th:nth-of-type(5){
+                width: 10%;
+            }
+            th:nth-of-type(6){
+                width: 10%;
+                border-top-right-radius: 7px;
+            }
+            table tr:last-child td:first-child{
+                border-bottom-left-radius: 7px;
+            }
+            table tr:last-child td:last-child {
+                border-bottom-right-radius: 7px;
+            }
+            tbody{
+                font-size: 10pt;
+            }
+            .red{
+                background-color: #ff4848;
+                color: #fff;
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="dicionario.js"></script>
+        <script>
+            $(document).ready(function(){
+                for(i = 0; i <= listings.length; i++){
+                    if ( listings[i].data_type == listings[i].data_type_2 ){
+                        $("tbody").append("<tr>"+
+                            "<td>" + listings[i].num + "</td>"+
+                            "<td>" + listings[i].column_name + "</td>"+
+                            "<td>" + listings[i].dictionary + "</td>"+
+                            "<td>" + listings[i].calculated + "</td>"+
+                            "<td>" + listings[i].data_type + "</td>"+
+                            "<td>" + listings[i].data_type_2 + "</td>"+
+                            "</tr>")
+                    } else {
+                        $("tbody").append("<tr>"+
+                                "<td>" + listings[i].num + "</td>"+
+                                "<td>" + listings[i].column_name + "</td>"+
+                                "<td>" + listings[i].dictionary + "</td>"+
+                                "<td>" + listings[i].calculated + "</td>"+
+                                "<td class='red'>" + listings[i].data_type + "</td>"+
+                                "<td class='red'>" + listings[i].data_type_2 + "</td>"+
+                            "</tr>")
+                    }
+                }
+            })
+        </script>
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nome da Coluna</th>
+                    <th>Dicionário</th>
+                    <th>Calculado (IABNB)</th>
+                    <th>Tipo Classe</th>
+                    <th>Tipo Notebook</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        <table>
+    </body>
+</html>
