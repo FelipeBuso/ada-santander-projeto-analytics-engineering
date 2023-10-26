@@ -21,7 +21,7 @@ runtime_configuration: {}
 validations:
   - batch_request:
       datasource_name: airbnb
-      data_asset_name: reviews
+      data_asset_name: listings
       options: {}
       batch_slice:
     expectation_suite_name: raw_listings
