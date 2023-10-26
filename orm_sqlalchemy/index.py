@@ -1,9 +1,11 @@
 import os
+from datetime import date
 import pandas as pd
 from typing import List
 from typing import Optional
 from sqlalchemy import BigInteger
 from sqlalchemy import create_engine
+from sqlalchemy import CursorResult
 from sqlalchemy import ForeignKey
 from sqlalchemy import text
 from sqlalchemy.orm import DeclarativeBase
@@ -21,10 +23,10 @@ class Base(DeclarativeBase):
 class Listings(Base):
     __tablename__ = "listings"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     listing_url: Mapped[str]
     scrape_id: Mapped[int] = mapped_column(BigInteger)
-    last_scraped: Mapped[str]
+    last_scraped: Mapped[date]
     source: Mapped[str]
     name: Mapped[str]
     description: Mapped[Optional[str]]
@@ -48,18 +50,18 @@ class Listings(Base):
     host_verifications: Mapped[Optional[str]]
     host_has_profile_pic: Mapped[bool]
     host_identity_verified: Mapped[bool]
-    neighbourhood: Mapped[Optional[str]]
+    # neighbourhood: Mapped[Optional[str]] # removida (usar neighbourhood_cleansed)
     neighbourhood_cleansed: Mapped[str]
-    neighbourhood_group_cleansed: Mapped[float]
+    # neighbourhood_group_cleansed: Mapped[float] # removida
     latitude: Mapped[float]
     longitude: Mapped[float]
     property_type: Mapped[str]
     room_type: Mapped[str]
     accommodates: Mapped[int]
-    bathrooms: Mapped[float]
+    # bathrooms: Mapped[float] # removida
     bathrooms_text: Mapped[Optional[str]]
     bedrooms: Mapped[float]
-    beds: Mapped[float]
+    beds: Mapped[int]
     amenities: Mapped[str]
     price: Mapped[str]
     minimum_nights: Mapped[int]
@@ -70,32 +72,32 @@ class Listings(Base):
     maximum_maximum_nights: Mapped[int]
     minimum_nights_avg_ntm: Mapped[float]
     maximum_nights_avg_ntm: Mapped[float]
-    calendar_updated: Mapped[float]
+    # calendar_updated: Mapped[float] # removida
     has_availability: Mapped[bool]
     availability_30: Mapped[int]
     availability_60: Mapped[int]
     availability_90: Mapped[int]
     availability_365: Mapped[int]
-    calendar_last_scraped: Mapped[str]
+    calendar_last_scraped: Mapped[date]
     number_of_reviews: Mapped[int]
     number_of_reviews_ltm: Mapped[int]
     number_of_reviews_l30d: Mapped[int]
-    first_review: Mapped[Optional[str]]
-    last_review: Mapped[Optional[str]]
-    review_scores_rating: Mapped[float]
-    review_scores_accuracy: Mapped[float]
-    review_scores_cleanliness: Mapped[float]
-    review_scores_checkin: Mapped[float]
-    review_scores_communication: Mapped[float]
-    review_scores_location: Mapped[float]
-    review_scores_value: Mapped[float]
-    license: Mapped[float]
+    first_review: Mapped[Optional[date]]
+    last_review: Mapped[Optional[date]]
+    review_scores_rating: Mapped[Optional[float]]
+    review_scores_accuracy: Mapped[Optional[float]]
+    review_scores_cleanliness: Mapped[Optional[float]]
+    review_scores_checkin: Mapped[Optional[float]]
+    review_scores_communication: Mapped[Optional[float]]
+    review_scores_location: Mapped[Optional[float]]
+    review_scores_value: Mapped[Optional[float]]
+    # license: Mapped[float] # removida
     instant_bookable: Mapped[bool]
     calculated_host_listings_count: Mapped[int]
     calculated_host_listings_count_entire_homes: Mapped[int]
     calculated_host_listings_count_private_rooms: Mapped[int]
     calculated_host_listings_count_shared_rooms: Mapped[int]
-    reviews_per_month: Mapped[float]
+    reviews_per_month: Mapped[Optional[float]]
 
     reviews: Mapped[List["Reviews"]] = relationship(
         back_populates="listining", cascade="all, delete-orphan"
@@ -189,7 +191,7 @@ class DatabaseHandler:
         Base.metadata.create_all(bind=self.get_engine())
         self.disconnect()
 
-    def execute_query(self, query_string) -> list:
+    def execute_query(self, query_string) -> CursorResult:
         """
         Executa uma consulta SQL e retorna os resultados.
 
@@ -197,12 +199,12 @@ class DatabaseHandler:
             query_string (str): A consulta SQL a ser executada.
 
         Returns:
-            list: Uma lista de resultados da consulta | None.
+            (CursorResult) objeto com resultado da query
         """
         try:
             query = text(query_string)
             result = self.connection.execute(query)
-            return result.fetchall()
+            return result
         except Exception as error:
             print(error)
             return None
