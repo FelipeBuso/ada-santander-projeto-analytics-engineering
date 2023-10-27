@@ -1,0 +1,176 @@
+{
+  "data_asset_type": null,
+  "expectation_suite_name": "raw_listings",
+  "expectations": [
+    {
+      "expectation_type": "expect_table_columns_to_match_set",
+      "kwargs": {
+        "column_set": [
+          "number_of_reviews",
+          "maximum_minimum_nights",
+          "host_identity_verified",
+          "description",
+          "source",
+          "host_total_listings_count",
+          "bathrooms_text",
+          "availability_30",
+          "host_neighbourhood",
+          "instant_bookable",
+          "host_location",
+          "id",
+          "neighbourhood_cleansed",
+          "amenities",
+          "latitude",
+          "minimum_nights_avg_ntm",
+          "maximum_maximum_nights",
+          "scrape_id",
+          "review_scores_checkin",
+          "host_response_time",
+          "host_url",
+          "host_response_rate",
+          "review_scores_location",
+          "bedrooms",
+          "host_since",
+          "first_review",
+          "host_thumbnail_url",
+          "host_acceptance_rate",
+          "host_verifications",
+          "review_scores_cleanliness",
+          "number_of_reviews_ltm",
+          "host_is_superhost",
+          "maximum_nights",
+          "beds",
+          "host_about",
+          "picture_url",
+          "minimum_minimum_nights",
+          "host_has_profile_pic",
+          "listing_url",
+          "availability_90",
+          "availability_365",
+          "reviews_per_month",
+          "minimum_nights",
+          "host_picture_url",
+          "accommodates",
+          "calculated_host_listings_count",
+          "review_scores_value",
+          "last_review",
+          "maximum_nights_avg_ntm",
+          "calculated_host_listings_count_entire_homes",
+          "price",
+          "room_type",
+          "host_id",
+          "review_scores_accuracy",
+          "name",
+          "review_scores_communication",
+          "host_name",
+          "property_type",
+          "neighborhood_overview",
+          "availability_60",
+          "longitude",
+          "number_of_reviews_l30d",
+          "host_listings_count",
+          "has_availability",
+          "review_scores_rating",
+          "minimum_maximum_nights",
+          "last_scraped",
+          "calculated_host_listings_count_shared_rooms",
+          "calculated_host_listings_count_private_rooms",
+          "calendar_last_scraped"
+        ],
+        "exact_match": null
+      }
+    },
+
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "id"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "id"
+      }
+    },
+
+
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "host_neighbourhood"
+      }
+    },
+    {
+      "expectation_type": "expect_column_value_lengths_to_be_between",
+      "kwargs": {
+        "column": "host_neighbourhood",
+        "max_value": 62,
+        "min_value": 2,
+        "mostly": 1.0,
+        "strict_max": false,
+        "strict_min": false
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_match_regex",
+      "kwargs": {
+        "column": "host_neighbourhood",
+        "mostly": 1.0,
+        "regex": "[A-Z0-9()_\"\\-]+"
+      }
+    },
+
+
+
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "neighbourhood_cleansed"
+      }
+    },
+    {
+      "expectation_type": "expect_column_value_lengths_to_be_between",
+      "kwargs": {
+        "column": "neighbourhood_cleansed",
+        "max_value": 62,
+        "min_value": 2,
+        "mostly": 1.0,
+        "strict_max": false,
+        "strict_min": false
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_match_regex",
+      "kwargs": {
+        "column": "neighbourhood_cleansed",
+        "mostly": 1.0,
+        "regex": "[A-Z0-9()_\"\\-]+"
+      }
+    },
+
+
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "host_is_superhost",
+        "mostly": 1.0,
+        "value_set": [
+          true,
+          false
+        ]
+      }
+    },
+    {
+      "expectation_type": "expect_column_unique_value_count_to_be_between",
+      "kwargs": {
+        "column": "host_is_superhost",
+        "max_value": 2,
+        "min_value": 2,
+        "strict_max": false,
+        "strict_min": false
+      }
+    }
+
+  ]
+}
