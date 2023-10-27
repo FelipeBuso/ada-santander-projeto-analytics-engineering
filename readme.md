@@ -2,7 +2,7 @@
 
 ## Projeto: Engenharia de Dados e Garantia de Qualidade no Conjunto de Dados do Airbnb no Rio de Janeiro.
 
-![data pipeline]('./doc/PROJ5_analytics-engineering_data-pipeline.jpg)
+![data pipeline](doc/PROJ5_analytics-engineering_data-pipeline.jpg)
 
 #### Introdução à Base de Dados do Airbnb
 
