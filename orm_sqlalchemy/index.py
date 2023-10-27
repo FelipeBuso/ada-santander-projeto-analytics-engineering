@@ -39,7 +39,7 @@ class Listings(Base):
     host_location: Mapped[Optional[str]]
     host_about: Mapped[Optional[str]]
     host_response_time: Mapped[Optional[str]]
-    host_response_rate: Mapped[Optional[str]]
+    host_response_rate: Mapped[Optional[float]]
     host_acceptance_rate: Mapped[Optional[str]]
     host_is_superhost: Mapped[bool]
     host_thumbnail_url: Mapped[Optional[str]]
@@ -204,7 +204,7 @@ class DatabaseHandler:
         try:
             query = text(query_string)
             result = self.connect().execute(query)
-            return result.fetchall()
+            return result
         except Exception as error:
             print(error)
             return None
