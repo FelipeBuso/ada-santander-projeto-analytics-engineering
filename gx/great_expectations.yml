@@ -94,55 +94,21 @@ data_docs_sites:
       class_name: DefaultSiteIndexBuilder
 
 anonymous_usage_statistics:
-  data_context_id: 9e8665f1-c55e-496a-8047-e7341e0fb560
+  data_context_id: 57aa342f-7d37-427f-b683-e7b8e284488e
   enabled: true
 fluent_datasources:
-  reviews_fs_raw:
-    type: pandas
-    assets:
-      reviews_fs_raw_asset:
-        type: csv
-        filepath_or_buffer: data\reviews.csv.gz
-  postgres_src:
-    type: postgres
-    assets:
-      listings_asset:
-        type: table
-        order_by: []
-        batch_metadata: {}
-        table_name: raw.g5_listings
-        schema_name:
-      listings_asset1:
-        type: table
-        order_by: []
-        batch_metadata: {}
-        table_name: g1_listings
-        schema_name: raw
-      listings_asset_1:
-        type: table
-        order_by: []
-        batch_metadata: {}
-        table_name: g1_listings
-        schema_name: raw
-      listings_asset_11:
-        type: table
-        order_by: []
-        batch_metadata: {}
-        table_name: g1_listings
-        schema_name: raw
-    connection_string: postgresql+psycopg2://postgres:ada_postgres_1009@database-ada-1009.clzgkgrmzmzh.us-east-1.rds.amazonaws.com:5432/postgres
   airbnb:
     type: pandas_filesystem
     assets:
       reviews:
         type: csv
         batching_regex: reviews\.csv\.gz
-      listings:
-        type: csv
-        batching_regex: listings\.csv\.gz
       calendar:
         type: csv
         batching_regex: calendar\.csv\.gz
+      listings:
+        type: csv
+        batching_regex: listings\.csv\.gz
     base_directory: data
 notebooks:
 include_rendered_content:
