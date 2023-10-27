@@ -2,6 +2,8 @@
 
 ## Projeto: Engenharia de Dados e Garantia de Qualidade no Conjunto de Dados do Airbnb no Rio de Janeiro.
 
+![data pipeline]('./doc/PROJ5_analytics-engineering_data-pipeline.jpg)
+
 #### Introdução à Base de Dados do Airbnb
 
 O conjunto de dados "Inside Airbnb", disponível no website "http://insideairbnb.com/", é uma valiosa fonte de informações sobre listagens de hospedagem, avaliações de hóspedes e disponibilidade de calendário em várias cidades ao redor do mundo, incluindo o Rio de Janeiro. Antes de prosseguirmos com a engenharia de dados, é importante entender os principais componentes deste conjunto de dados:
@@ -141,3 +143,12 @@ pip install prisma
 ```
 prisma generate --schema ./prisma/schema.prisma
 ```
+
+
+## Ordem de execução das aplicações
+
+1. **crawler.ipynb**: realiza a aquisição dos dados através de busca por links referentes à cidade do Rio de Janeiro na página do Insideairbnb.
+2. **raw.ipynb**: realiza a ingestão dos dados baixados em CSV para a instância do Postgres containerizada. Os dados são salvos no schema `raw` usando a engine do `sqlalchemy`. As tabelas salvas são: listings, reviews e calendar.
+3. **DataQuality_monitor_raw.ipynb**: valida os dados em raw de todas as tabelas com o objetivo de garantir que os dados estão dentro dos padrões previstos nas aplicações de transformações de dados.
+4. **trusted.ipynb**: realiza o tratamento da tabela listings segundo critérios levantados para garantir a precisão e consistência dos dados. Ao final os dados sanitizados são persistidos na camada `trusted`.
+5. **Especialização dos dados**: para realizar a transformação dos dados em informações relevantes para o negócio trazendo insights, é executado queries `SQL` através `CLI` com o `dbt`  e persistindo os resultados na camada `specs`.
