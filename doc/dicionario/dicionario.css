@@ -1,0 +1,87 @@
+body{
+    margin: 0;
+    background: linear-gradient(to bottom, #33ccff 0%, #adadad 100%);
+}
+main{
+    padding-bottom: 30px;
+}
+h3{
+    display: block;
+    text-align: center;
+    margin: 30px auto;
+    font-size: 22pt;
+    width: 50%;
+    padding: 12px;
+    border-radius: 30px;
+    color: #fff;
+}
+h3:first-of-type{
+    background-color: #213f90;
+}
+h3:last-of-type{
+    background-color: #aa4516;
+}
+table{
+    width: 960px;
+    /* border: 1px solid #aaa; */
+    border-collapse: collapse;
+    margin: auto;
+}
+table th {
+    font-weight: normal;
+    text-shadow: -1px -1px 1px #999;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    font-weight: bold;
+}
+#atuais th{
+    background-color: #213f90;
+    color: #fff;
+    font-size: 15pt;
+}
+#removidos th{
+    background-color: #aa4516;
+    color: #fff;
+    font-size: 10pt;
+}
+table td + td {
+    border-left:2px solid #eee;
+    padding: 5px;
+}
+table tr:nth-of-type(2n){
+    background-color: #ffffff;
+}
+table tr:nth-of-type(2n-1) {
+    background-color: #eee;
+}
+th:first-of-type{
+    width: 3%;
+    border-top-left-radius: 7px;
+}
+th:nth-of-type(2){
+    width: 20%;
+}
+th:nth-of-type(3){
+    width: 57%;
+}
+th:nth-of-type(4){
+    width: 7%;
+}
+th:nth-of-type(5){
+    width: 13%;
+}
+tr>td:first-child, tr>td:nth-child(4), tr>td:last-of-type{
+    text-align: center;
+}
+table th:last-of-type{
+    border-top-right-radius: 7px;
+}
+table tr:last-child td:first-child{
+    border-bottom-left-radius: 7px;
+}
+table tr:last-child td:last-child {
+    border-bottom-right-radius: 7px;
+}
+tbody{
+    font-size: 10pt;
+}

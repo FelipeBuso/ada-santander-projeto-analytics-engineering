@@ -1,3 +1,33 @@
+$(document).ready(function(){
+    let atuais = 0;
+    let removidos = 0;
+    for(i = 0; i <= listings.length; i++){
+        if ( listings[i].data_type_2 != "-- removida --"){
+            atuais += 1;
+            $("#atuais tbody").append("<tr>"+
+                "<td>" + atuais + "</td>"+
+                // "<td>" + listings[i].num + "</td>"+
+                "<td>" + listings[i].column_name + "</td>"+
+                "<td>" + listings[i].dictionary + "</td>"+
+                "<td>" + listings[i].calculated + "</td>"+
+                // "<td>" + listings[i].data_type + "</td>"+
+                "<td>" + listings[i].data_type_2 + "</td>"+
+                "</tr>")
+        } else {
+            removidos += 1;
+            $("#removidos tbody").append("<tr>"+
+                "<td>" + removidos + "</td>"+
+                // "<td>" + listings[i].num + "</td>"+
+                "<td>" + listings[i].column_name + "</td>"+
+                "<td>" + listings[i].dictionary + "</td>"+
+                "<td>" + listings[i].calculated + "</td>"+
+                "<td>" + listings[i].data_type + "</td>"+
+                // "<td class='red'>" + listings[i].data_type_2 + "</td>"+
+            "</tr>")
+        }
+    }
+})
+
 listings = [
     {
         "num": "01",
@@ -133,7 +163,7 @@ listings = [
         "dictionary": "Índice de resposta do anfitrião",
         "calculated": "Não",
         "data_type": "str",
-        "data_type_2": "str"
+        "data_type_2": "float"
     },
     {
         "num": "18",
