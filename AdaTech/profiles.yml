@@ -14,11 +14,21 @@ AdaTech:
     trusted:
       type: postgres
       threads: 1
-      host: postgres
-      port: ${POSTGRES_PORT_CONTAINER}
-      user: ${POSTGRES_USER}
-      pass: ${POSTGRES_PASSWORD}
+      host: localhost
+      port: "{{ env_var('DBT_PORT') | int }}"
+      user: "{{ env_var('DBT_USER') }}"
+      pass: "{{ env_var('DBT_PASSWORD') }}"
       dbname: airbnb
-      schema: trusted
+      schema: raw
+
+    spec:
+      type: postgres
+      threads: 1
+      host: localhost
+      port: "{{ env_var('DBT_PORT') | int }}"
+      user: "{{ env_var('DBT_USER') }}"
+      pass: "{{ env_var('DBT_PASSWORD') }}"
+      dbname: airbnb
+      schema: spec
 
   target: raw
