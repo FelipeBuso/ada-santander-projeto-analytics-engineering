@@ -102,7 +102,7 @@ $ export DBT_USER=<USUÁRIO>
 $ export DBT_PASSWORD=<SENHA>
 ```
 
-Caso esteja usando um amabiente virtual, é possivel declarar as variáveis no arquivo de configuração do .venv:
+Caso esteja usando um ambiente virtual, é possivel declarar as variáveis no arquivo de configuração do .venv:
 **.venv/bin/activate**
 
 ## PostgreSQL
