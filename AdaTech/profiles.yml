@@ -19,9 +19,9 @@ AdaTech:
       user: "{{ env_var('DBT_USER') }}"
       pass: "{{ env_var('DBT_PASSWORD') }}"
       dbname: airbnb
-      schema: raw
+      schema: trusted
 
-    spec:
+    specs:
       type: postgres
       threads: 1
       host: localhost
@@ -29,6 +29,6 @@ AdaTech:
       user: "{{ env_var('DBT_USER') }}"
       pass: "{{ env_var('DBT_PASSWORD') }}"
       dbname: airbnb
-      schema: spec
+      schema: specs
 
   target: raw

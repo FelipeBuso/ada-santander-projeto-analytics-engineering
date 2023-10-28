@@ -8,4 +8,4 @@ SELECT
         WHEN host_neighbourhood = neighbourhood_cleansed THEN 1
         ELSE 0
     END AS e_proximo
-FROM raw.listings
+FROM trusted.listings
