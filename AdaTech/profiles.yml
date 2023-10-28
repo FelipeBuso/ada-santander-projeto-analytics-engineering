@@ -5,9 +5,9 @@ AdaTech:
       type: postgres
       threads: 1
       host: localhost
-      port: 5434
-      user: postgres
-      pass: postgres
+      port: "{{ env_var('DBT_PORT') | int }}"
+      user: "{{ env_var('DBT_USER') }}"
+      pass: "{{ env_var('DBT_PASSWORD') }}"
       dbname: airbnb
       schema: raw
 

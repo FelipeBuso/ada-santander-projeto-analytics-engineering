@@ -74,7 +74,7 @@ O dicionário dos dados também está disponível no website: "http://insideairb
 
 ## Venv
 
-- Criar e iniciar ambiente virtual
+> Criar e iniciar ambiente virtual
 
 ```
 python3 -m venv .venv && source .venv/bin/activate --no-site-packages
@@ -82,7 +82,7 @@ python3 -m venv .venv && source .venv/bin/activate --no-site-packages
 
 ## Bibliotecas
 
-- Instalar bibliotecas do projeto
+> Instalar bibliotecas do projeto
 
 ```
 pip install -r  requirements.txt
@@ -90,7 +90,17 @@ pip install -r  requirements.txt
 
 ## Variáveis de ambiente
 
-- Crie um arquivo chamado `.env` na raiz do seu projeto com as os valores das variáveis de ambiente de acordo com àquelas do arquivo `.env.example`.
+> Crie um arquivo chamado `.env` na raiz do seu projeto com as os valores das variáveis de ambiente de acordo com àquelas do arquivo `.env.example`.
+
+> **DBT**
+
+DBT não acessa o arquivo **.venv**, as variáveis devem se setadas pelo terminal:
+
+```
+$ export BDT_PORT=<PORTA_COMUNICAÇÃO_COM_POSTGRESQL>
+$ export DBT_USER=<USUÁRIO>
+$ export DBT_PASSWORD=<SENHA>
+```
 
 ## PostgreSQL
 
@@ -144,7 +154,6 @@ pip install prisma
 prisma generate --schema ./prisma/schema.prisma
 ```
 
-
 ## Ordem de execução das aplicações
 
 1. **crawler.ipynb**: realiza a aquisição dos dados através de busca por links referentes à cidade do Rio de Janeiro na página do Insideairbnb.
@@ -152,4 +161,4 @@ prisma generate --schema ./prisma/schema.prisma
 3. **DataQuality_monitor_raw.ipynb**: valida os dados em `raw` de todas as tabelas com o objetivo de garantir que os dados estão dentro dos padrões previstos nas aplicações de transformações de dados.
 4. **trusted.ipynb**: realiza o tratamento da tabela listings segundo critérios levantados para garantir a precisão e consistência dos dados. Ao final os dados sanitizados são persistidos na camada `trusted`.
 5. **DataQuality_monitor_trusted.ipynb**: valida os dados em `trusted` da tabela listings baseado nas condições esperadas para que os dados possam ser disponibilizados para a equipe.
-6. **Especialização dos dados**: para realizar a transformação dos dados em informações relevantes para o negócio trazendo insights, é executado queries `SQL` através `CLI` com o `dbt`  e persistindo os resultados na camada `specs`. Código da execução: `dbt run --select imoveis_anfitriao --target AdaTech --profiles-dir` e `dbt run --select proximidade_anfitriao --target AdaTech --profiles-dir`. Com esta análise pretende-se responder se o anfitrião master mora na proximidade do imóvel para locação temporária.
+6. **Especialização dos dados**: para realizar a transformação dos dados em informações relevantes para o negócio trazendo insights, é executado queries `SQL` através `CLI` com o `dbt` e persistindo os resultados na camada `specs`. Código da execução: `dbt run --select imoveis_anfitriao --target AdaTech --profiles-dir` e `dbt run --select proximidade_anfitriao --target AdaTech --profiles-dir`. Com esta análise pretende-se responder se o anfitrião master mora na proximidade do imóvel para locação temporária.
