@@ -94,25 +94,16 @@ data_docs_sites:
       class_name: DefaultSiteIndexBuilder
 
 anonymous_usage_statistics:
-  data_context_id: 15815cd6-41ca-48fc-a40a-85c38e44e694
+  data_context_id: 06ffb0a6-877f-4867-b097-9ea35e14704e
   enabled: true
 fluent_datasources:
   airbnb:
     type: pandas_filesystem
     assets:
-      reviews:
-        type: csv
-        batching_regex: reviews\.csv\.gz
-      calendar:
-        type: csv
-        batching_regex: calendar\.csv\.gz
       listings:
         type: csv
         batching_regex: listings\.csv\.gz
-      trusted_listings:
-        type: csv
-        batching_regex: trusted_listings\.csv\.gz
-    base_directory: data
+    base_directory: ../data
 notebooks:
 include_rendered_content:
   globally: false
