@@ -14,6 +14,7 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import relationship
 from sqlalchemy.exc import IntegrityError
+from dotenv import load_dotenv
 
 
 class Base(DeclarativeBase):
@@ -154,6 +155,7 @@ class DatabaseHandler:
     """
 
     def __init__(self):
+        load_dotenv()
         db_url = os.environ.get("POSTGRES_URI")
         self._engine = create_engine(db_url)
 
